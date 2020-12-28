@@ -7,6 +7,8 @@ const deleteRoomData = async (req, res) => {
     if('_id' in query || 'room_id' in query){
 
         await deleteData(query, res)
+    }else{
+        res.sendStatus(500)
     }
     
 }
