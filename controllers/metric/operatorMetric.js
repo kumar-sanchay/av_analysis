@@ -1,6 +1,6 @@
 const ChatRoom = require('../../models/Chatroom')
 
-const operatorMetric = (res, req) =>{
+const operatorMetric = async (res, req) =>{
 
     const query = req.query
 
@@ -15,12 +15,16 @@ const operatorMetric = (res, req) =>{
         let status = query.status
         status = status.split("|")
 
+        let date_range = req.query.date
+        date_range = date_range.split("|")
+
+        await teamOperatorStatusDateFilter(teams, operators, status, date_range, res)
         
     }
 
 }
 
-const teamOperatorStatusDateFilter = (teams, operators, status, date_range) =>{
+const teamOperatorStatusDateFilter = (teams, operators, status, date_range, res) =>{
 
     ChatRoom.aggregate([
         {
@@ -48,7 +52,7 @@ const teamOperatorStatusDateFilter = (teams, operators, status, date_range) =>{
         },
         {
             $group:{
-                _id: "$assigned_operator",
+                _id: {assigned_operator:"$assigned_operator", status:"$status"},
                 count:{$sum:1}
             }
         }

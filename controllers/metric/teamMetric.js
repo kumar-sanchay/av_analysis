@@ -1,6 +1,6 @@
 const ChatRoom = require('../../models/Chatroom')
 
-const teamMetric = (req, res) => {
+const teamMetric = async (req, res) => {
 
     let query = req.query
 
@@ -17,8 +17,9 @@ const teamMetric = (req, res) => {
 
         let status = req.query.status
         status = status.split("|")
-
-        statusTeamDateFilter(status, teams, date_range, res)
+        await statusTeamDateFilter(status, teams, date_range, res)
+    }else{
+        res.sendStatus(500)
     }
     
 }
@@ -44,7 +45,7 @@ const statusTeamDateFilter = (status, team, date_range, res) =>{
             }
         },
         {
-            $group:{_id:"$assigned_team", count:{$sum:1}}
+            $group:{_id:{team_id:"$assigned_team", status:"$status"}, count:{$sum:1}}
         }
     ])
     .then(chatroom=>{

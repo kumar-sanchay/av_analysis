@@ -1,6 +1,7 @@
 
 const HeaderToken = (req, res, next) => {
-    //Logic here
+    
+    const headers = req.headers
     next()
 }
 
