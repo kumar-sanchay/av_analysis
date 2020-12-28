@@ -7,6 +7,7 @@ const deleteRoomData = async (req, res) => {
     if('_id' in query || 'room_id' in query){
 
         await deleteData(query, res)
+
     }else{
         res.sendStatus(500)
     }
@@ -15,7 +16,7 @@ const deleteRoomData = async (req, res) => {
 
 const deleteData = (query, res) =>{
 
-    ChatRoom.deleteOne(query)
+    ChatRoom.remove(query)
     .then(chatroom=>{
         res.sendStatus(200)
     })
