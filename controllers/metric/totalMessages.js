@@ -39,7 +39,7 @@ const totalMessagesFilter = (room_id, date_range, res) =>{
 
         let final_result = new Object()
         let bot_chat_count = chatroom[0]._id=="bot"?chatroom[0].count:chatroom[1].count
-        let end_user_count = chatroom[0]._id=="user"?chatroom[0].count:chatroom[1].count
+        let end_user_count = chatroom[0]._id=="end_user"?chatroom[0].count:chatroom[1].count
 
         let bot_chat_percentage = (bot_chat_count/(bot_chat_count+end_user_count)) * 100
         let end_user_chat_percentage = (end_user_count/(bot_chat_count+end_user_count)) * 100

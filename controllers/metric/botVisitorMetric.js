@@ -66,7 +66,7 @@ const botConversationFilter = (room_id, date_range, res) => {
         },
         {
             $group:{
-                _id:{room_id:"$room_id", is_conversation:{$cond:{ if: {$eq:[{$in:["user", "$messages.user"]}, true]},
+                _id:{room_id:"$room_id", is_conversation:{$cond:{ if: {$eq:[{$in:["end_user", "$messages.user"]}, true]},
                                                                     then:true, else:false}}},
                 count:{$sum:1}
             }
