@@ -1,6 +1,6 @@
 const ChatRoom = require('../../models/Chatroom')
 
-const botVisitorMetric = (req, res) => {
+const botVisitorMetric = async (req, res) => {
 
     const query = req.query
 
@@ -12,9 +12,9 @@ const botVisitorMetric = (req, res) => {
         date_range = date_range.split("|")
 
         if(type_api==="visitor")
-            botVisitorFilter(room_id, date_range, res)
+            await botVisitorFilter(room_id, date_range, res)
         else if(type_api==="conversation")
-            botConversationFilter(room_id, date_range, res)
+            await botConversationFilter(room_id, date_range, res)
         else res.sendStatus(500)
 
     }else{
@@ -73,6 +73,7 @@ const botConversationFilter = (room_id, date_range, res) => {
         }
     ])
     .then(chatroom=>{
+        console.log(chatroom)
         let final_result = new Object()
         let conv = chatroom[0]._id.is_conversation==true?chatroom[0].count:chatroom[1].count
         let non_conv = chatroom[0]._id.is_conversation==false?chatroom[0].count:chatroom[1].count
