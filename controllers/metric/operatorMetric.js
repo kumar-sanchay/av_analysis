@@ -1,24 +1,23 @@
 const ChatRoom = require('../../models/Chatroom')
 
-const operatorMetric = async (res, req) =>{
+const operatorMetric = (req, res) =>{
 
-    const query = req.query
-
+    let query = req.query
     if('operators' in query && 'status' in query && 'date' in query){
 
         let operators = query.operators
         operators = operators.split("|")
 
-        let teams = query.teams
-        teams = teams.split("|")
-
+        // let teams = query.teams
+        // teams = teams.split("|")
+        console.log(operators)
         let status = query.status
         status = status.split("|")
 
         let date_range = req.query.date
         date_range = date_range.split("|")
 
-        await teamOperatorStatusDateFilter(teams, operators, status, date_range, res)
+        teamOperatorStatusDateFilter(operators, status, date_range, res)
         
     }else{
         res.sendStatus(500)
@@ -26,14 +25,13 @@ const operatorMetric = async (res, req) =>{
 
 }
 
-const teamOperatorStatusDateFilter = (teams, operators, status, date_range, res) =>{
-
+const teamOperatorStatusDateFilter = (operators, status, date_range, res) =>{
     ChatRoom.aggregate([
-        {
-            $match:{
-                assigned_team:{$in: teams}
-            }
-        },
+        // {
+        //     $match:{
+        //         assigned_team:{$in: teams}
+        //     }
+        // },
         {
             $match:{
                 status:{$in: status}
@@ -60,10 +58,10 @@ const teamOperatorStatusDateFilter = (teams, operators, status, date_range, res)
         },
         {
             $group:{
-                _id:{"operator": "$assigned_operator"},
+                _id:{"operator": "$_id.assigned_operator"},
                 status:{
                     $push:{
-                        status:"$status",
+                        status:"$_id.status",
                         count: "$count"   
                     }
                 }
