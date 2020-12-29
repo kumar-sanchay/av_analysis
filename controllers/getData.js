@@ -1,9 +1,9 @@
 
 const ChatRoom = require('../models/Chatroom')
 
-const getData = (req, res) => {
+const getData = async (req, res) => {
     console.log(req.query)
-    ChatRoom.find({}, (error, chatroom)=>{
+    await ChatRoom.find({}, (error, chatroom)=>{
 
         if(error){
             res.sendStatus(500)

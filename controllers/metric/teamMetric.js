@@ -5,7 +5,7 @@ const teamMetric = async (req, res) => {
     let query = req.query
 
 
-    if('teams' in query && 'date' in query && 'status' in query){
+    if('teams' in query && 'date' in query && 'status' in query && 'channels' in query){
         let date_range = req.query.date
         date_range = date_range.split("|")
 
@@ -17,15 +17,23 @@ const teamMetric = async (req, res) => {
 
         let status = req.query.status
         status = status.split("|")
-        await statusTeamDateFilter(status, teams, date_range, res)
+
+        let channels = req.query.channels
+        channels = channels.split("|")
+        await statusTeamDateFilter(status, teams, date_range, channels, res)
     }else{
         res.sendStatus(500)
     }
     
 }
 
-const statusTeamDateFilter = (status, team, date_range, res) =>{
+const statusTeamDateFilter = (status, team, date_range, channels, res) =>{
     ChatRoom.aggregate([
+        {
+            $match:{
+                chatbot_type: {$in: channels}
+            }
+        },
         {
             $match:{
                 status: {$in: status}

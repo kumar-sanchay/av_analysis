@@ -1,9 +1,9 @@
 const ChatRoom = require('../../models/Chatroom')
 
-const operatorMetric = (req, res) =>{
+const operatorMetric = async (req, res) =>{
 
     let query = req.query
-    if('operators' in query && 'status' in query && 'date' in query){
+    if('operators' in query && 'status' in query && 'date' in query && 'channels' in query){
 
         let operators = query.operators
         operators = operators.split("|")
@@ -17,7 +17,10 @@ const operatorMetric = (req, res) =>{
         let date_range = req.query.date
         date_range = date_range.split("|")
 
-        teamOperatorStatusDateFilter(operators, status, date_range, res)
+        let channels = req.query.channels
+        channels = channels.split("|")
+
+        await teamOperatorStatusDateFilter(operators, status, date_range, channels, res)
         
     }else{
         res.sendStatus(500)
@@ -25,13 +28,18 @@ const operatorMetric = (req, res) =>{
 
 }
 
-const teamOperatorStatusDateFilter = (operators, status, date_range, res) =>{
+const teamOperatorStatusDateFilter = (operators, status, date_range, channels, res) =>{
     ChatRoom.aggregate([
         // {
         //     $match:{
         //         assigned_team:{$in: teams}
         //     }
         // },
+        {
+            $match:{
+                chatbot_type:{$in: channels}
+            }
+        },
         {
             $match:{
                 status:{$in: status}
