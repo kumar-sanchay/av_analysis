@@ -20,6 +20,8 @@ const operatorMetric = async (res, req) =>{
 
         await teamOperatorStatusDateFilter(teams, operators, status, date_range, res)
         
+    }else{
+        res.sendStatus(500)
     }
 
 }
