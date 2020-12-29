@@ -4,7 +4,7 @@ const operatorMetric = async (res, req) =>{
 
     const query = req.query
 
-    if('operators' in query && 'teams' in query && 'status' in query && 'date' in query){
+    if('operators' in query && 'status' in query && 'date' in query){
 
         let operators = query.operators
         operators = operators.split("|")
