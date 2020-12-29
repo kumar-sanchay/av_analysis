@@ -46,6 +46,16 @@ const statusTeamDateFilter = (status, team, date_range, res) =>{
         },
         {
             $group:{_id:{team_id:"$assigned_team", status:"$status"}, count:{$sum:1}}
+        },
+        {
+            $group:{_id:{team_id:"$_id.team_id"},
+            status:{
+                    $push:{
+                        status:"$_id.status",
+                        count: "$count"
+                    }
+                }
+            }
         }
     ])
     .then(chatroom=>{

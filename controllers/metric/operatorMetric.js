@@ -55,7 +55,18 @@ const teamOperatorStatusDateFilter = (teams, operators, status, date_range, res)
                 _id: {assigned_operator:"$assigned_operator", status:"$status"},
                 count:{$sum:1}
             }
-        }
+        },
+        {
+            $group:{
+                _id:{"operator": "$assigned_operator"},
+                status:{
+                    $push:{
+                        status:"$status",
+                        count: "$count"   
+                    }
+                }
+            }
+        },
     ])
     .then(chatroom=>{
         res.json(chatroom)
