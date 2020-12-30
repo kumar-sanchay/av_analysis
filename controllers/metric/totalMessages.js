@@ -29,7 +29,15 @@ const totalMessagesFilter = (room_id, date_range, res) =>{
         },
         {
             $group: {
-                _id:{$arrayElemAt:["$messages.user", 0]},
+                _id:{user:"$messages.user"},    
+            }
+        },
+        {
+            $unwind:"$_id.user"
+        },
+        {
+            $group:{
+                _id:"$_id.user",
                 count:{$sum:1}
             }
         }
