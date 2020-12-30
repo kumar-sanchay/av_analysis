@@ -75,11 +75,26 @@ const botConversationFilter = (room_id, date_range, res) => {
     .then(chatroom=>{
         console.log(chatroom)
         let final_result = new Object()
-        let conv = chatroom[0]._id.is_conversation==true?chatroom[0].count:chatroom[1].count
-        let non_conv = chatroom[0]._id.is_conversation==false?chatroom[0].count:chatroom[1].count
+        let conv = 0
+        let non_conv = 0
+        let conv_rate = 0
 
-        let conv_rate = (conv/(non_conv+conv)) * 100
+        try{
+            conv = chatroom[0]._id.is_conversation==true?chatroom[0].count:chatroom[1].count
+        }catch(e){
+            conv = 0
+        }
 
+        try{
+            non_conv = chatroom[0]._id.is_conversation==false?chatroom[0].count:chatroom[1].count
+        }catch(e){
+            non_conv = 0
+        }
+        try{
+            conv_rate = (conv/(non_conv+conv)) * 100
+        }catch(e){
+            conv_rate = 0
+        }
         final_result.conversational_rate = conv_rate
         chatroom.push(final_result)
         res.json(chatroom)

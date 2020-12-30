@@ -37,11 +37,29 @@ const goalMetricFilter = (room_id, date_range, res) => {
     ])
     .then(chatroom=>{
         let final_result = new Object()
-        let goal_true = chatroom[0]._id.result==true?chatroom[0].count:chatroom[1].count
-        let goal_false = chatroom[0]._id.result==false?chatroom[0].count:chatroom[1].count
 
-        let goal_percentage = (goal_true/(goal_true+goal_false)) * 100
-        console.log(goal_true+goal_false)
+        let goal_true = 0
+        let goal_false = 0
+        let goal_percentage = 0
+
+        try{
+            goal_true = chatroom[0]._id.result==true?chatroom[0].count:chatroom[1].count
+        }catch(e){
+            goal_true = 0
+        }
+
+        try{
+            goal_false = chatroom[0]._id.result==false?chatroom[0].count:chatroom[1].count
+        }catch(e){
+            goal_false = 0
+        }
+
+        try{
+            goal_percentage = (goal_true/(goal_true+goal_false)) * 100
+        }catch(e){
+            goal_percentage = 0
+        }
+        
         final_result.goal_percentage = goal_percentage
         chatroom.push(final_result)
         res.json(chatroom)
